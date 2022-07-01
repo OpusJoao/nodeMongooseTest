@@ -1,16 +1,18 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose');
+let model;
 
 app.use(express.json())
 
 
-app.get('/',(req,res)=>{
-    res.send({})
+app.get('/',async (req,res)=>{
+	const data = await model.find({})
+    	res.send({data})
 })
 
 async function main() {
-  await mongoose.connect('mongodb://10.150.2.188:27017,10.150.2.205:27017/?replicaSet=rs1');
+  await mongoose.connect('mongodb://x.x.x.x:27017,x.x.x.x:27017/?replicaSet=rs1');
 }
 
 main().then(()=>{
@@ -20,8 +22,8 @@ main().then(()=>{
         const kittySchema = new mongoose.Schema({
             name: String
           });
-        const Kitten = mongoose.model('Kitten', kittySchema);
+        const Kitten = model = mongoose.model('Kitten', kittySchema);
         const silence = new Kitten({ name: 'Silence' });
-        console.log(silence);
+	silence.save().then( data =>console.log(silence,data) )
     })
 }).catch(err => console.log(err));
